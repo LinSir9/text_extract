@@ -1,13 +1,12 @@
 package com.json.extract.controller;
 
+import com.json.extract.constants.ExtractConstants;
 import com.json.extract.dto.response.ApiResult;
-import com.json.extract.exception.ApiErrorCode;
 import com.json.extract.exception.TextExtractErrorCode;
 import com.json.extract.service.TextExtractService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/text/extract")
+@RequestMapping("/extract")
 public class TextExtractController {
 
     @Resource
@@ -33,7 +32,7 @@ public class TextExtractController {
      * @param file 文件
      * @return 文本提取结果
      */
-    @PostMapping
+    @PostMapping("/text")
     public ApiResult<List<String>> textExtract(@RequestPart("file") MultipartFile file) {
         if (file == null) {
             return ApiResult.error(TextExtractErrorCode.PARAM_NULL);
@@ -42,6 +41,24 @@ public class TextExtractController {
             return ApiResult.success(textExtractService.textExtract(file));
         } catch (Exception e) {
             log.error("文本提取异常.", e);
+            return ApiResult.error(TextExtractErrorCode.SYSTEM_001);
+        }
+    }
+
+    /**
+     * 字段提取
+     * @param file 文件
+     * @return 字段提取结果
+     */
+    @PostMapping("/field")
+    public ApiResult<List<String>> fieldExtract(@RequestPart("file") MultipartFile file) {
+        if (file == null) {
+            return ApiResult.error(TextExtractErrorCode.PARAM_NULL);
+        }
+        try {
+            return ApiResult.success(textExtractService.fieldExtract(file, ExtractConstants.ORDER_ID));
+        } catch (Exception e) {
+            log.error("字段提取异常.", e);
             return ApiResult.error(TextExtractErrorCode.SYSTEM_001);
         }
     }

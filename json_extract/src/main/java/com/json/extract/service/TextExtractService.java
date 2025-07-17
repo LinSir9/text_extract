@@ -17,4 +17,12 @@ public interface TextExtractService {
      * @return 提取结果
      */
     List<String> textExtract(MultipartFile file);
+
+    /**
+     * 字段提取
+     * @param file 文件
+     * @param extractField 提取字段
+     * @return 提取结果
+     */
+    List<String> fieldExtract(MultipartFile file, String extractField);
 }

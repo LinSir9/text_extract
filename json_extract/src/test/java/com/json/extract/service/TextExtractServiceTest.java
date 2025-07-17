@@ -1,5 +1,6 @@
 package com.json.extract.service;
 
+import com.json.extract.constants.ExtractConstants;
 import com.json.extract.util.FileWriteUtil;
 import com.json.extract.util.ListUtil;
 import com.json.extract.util.MultipartFileUtil;
@@ -35,6 +36,22 @@ public class TextExtractServiceTest {
             return;
         }
         String insertPath = "/Users/linjie/download/11.xlsx";
+        FileWriteUtil.writeListToFile(result, insertPath);
+        log.info("文件写入成功. size: {}", result.size());
+    }
+
+    @Test
+    public void testFieldExtract() {
+        String readPath = "/Users/linjie/download/ecd8168c-897e-45cd-b6c6-4aa7939d5db9.xlsx";
+        MultipartFile multipartFile = MultipartFileUtil.fileToMultipartFile(readPath);
+        if (multipartFile == null) {
+            return;
+        }
+        List<String> result = textExtractService.fieldExtract(multipartFile, ExtractConstants.ORDER_ID);
+        if (ListUtil.isEmpty(result)) {
+            return;
+        }
+        String insertPath = "/Users/linjie/download/22.xlsx";
         FileWriteUtil.writeListToFile(result, insertPath);
         log.info("文件写入成功. size: {}", result.size());
     }

@@ -5,7 +5,6 @@ import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.ExcelReader;
 import com.json.extract.constants.CommonConstants;
-import com.json.extract.constants.ExtractConstants;
 import com.json.extract.dto.OneTextExtractRow;
 import com.json.extract.service.TextExtractService;
 import com.json.extract.util.ExcelListener;
@@ -32,6 +31,11 @@ import java.util.List;
 public class TextExtractServiceImpl implements TextExtractService {
 
     /**
+     * excel表头行数
+     */
+    private static final Integer HEAD_ROW_NUM = CommonConstants.ONE;
+
+    /**
      * 文本提取
      * @param file 文件
      * @return 文本提取结果
@@ -39,11 +43,23 @@ public class TextExtractServiceImpl implements TextExtractService {
     @Override
     public List<String> textExtract(MultipartFile file) {
         // 1、excel解析
-        List<OneTextExtractRow> texts = this.excelAnalysis(file, CommonConstants.ONE);
+        List<OneTextExtractRow> texts = this.excelAnalysis(file, HEAD_ROW_NUM);
         // 2、提取文本内容
-        List<String> contents = this.extractText(texts);
-        // 3、提取文本字段
-        return this.extractTextField(contents, ExtractConstants.ORDER_ID);
+        return this.extractText(texts);
+    }
+
+    /**
+     * 提取字段
+     * @param file 文件
+     * @param extractField 提取字段
+     * @return 提取字段内容
+     */
+    @Override
+    public List<String> fieldExtract(MultipartFile file, String extractField) {
+        // 1、提取文本内容
+        List<String> contents = this.textExtract(file);
+        // 2、提取文本字段
+        return this.extractTextField(contents, extractField);
     }
 
     /**
