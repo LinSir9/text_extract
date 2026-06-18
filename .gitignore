@@ -1,0 +1,16 @@
+.idea
+.claude
+.cursor
+docs
+spec
+doc
+.scratch
+.kld-review
+/openspec/changes/*
+!openspec/changes/archive/
+!openspec/changes/archive/**
+/openspec/config.yaml
+
+# 申Coding local workflow checkpoints
+/workflow/
+/CLAUDE.md
